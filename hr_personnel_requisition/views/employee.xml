@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="inside">
+                    <group string="Recruitment">
+                        <group>
+                            <field name="application_id" readonly="1" force_save="1"/>
+                            <field name="application_remark" attrs="{'readonly': [('application_id', 'not in', [False])]}"/>
+                            <field name="medium_id"/>
+                            <field name="source_id"/>
+                        </group>
+                        <group>
+                            <field name="application_date" readonly="1" attrs="{'invisible': [('application_date', '=', False)]}"/>
+                            <field name="recruitment_date"/>
+                            <field name="onboarding_date"/>
+                            <field name="verbal"/>
+                            <field name="numerical"/>
+                            <field name="abstract"/>
+                            <field name="iq_average"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='parent_id']" position="before">
+                    <field name="employment_type_id"/>
+                    <field name="employment_status_id"/>
+                </xpath>
+                <xpath expr="//page[@name='personal_information']/group" position="inside">
+                    <group string="Ratings and Licenses">
+                      <field name="gpa"/>
+                      <field name="prc"/>
+                      <field name="rating"/>
+                    </group>
+                    <group string="Government Benefits">
+                      <field name="sss"/>
+                      <field name="gsis"/>
+                      <field name="hdmf"/>
+                      <field name="philhealth"/>
+                      <field name="tin"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_movement_form" model="ir.ui.view">
+            <field name="name">hr.employee.movement.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_employee_movement.employee_form_view"/>
+            <field name="arch" type="xml">
+                <field name="agency_id" position="after">
+                  <field name="company_assignment_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_contract_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.form.view</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_employee_movement.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='rank_id']" position="after">
+                    <field name="employment_type_id"/>
+                    <field name="employment_status_id"/>
+                </xpath>
+                <xpath expr="//field[@name='job_id']" position="before">
+                    <field name="company_assignment_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_hr_employment_type_tree" model="ir.ui.view">
+            <field name="name">hr.employment.type.tree</field>
+            <field name="model">hr.employment.type</field>
+            <field name="arch" type="xml">
+                <tree string="Employment Type" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_employment_type" model="ir.actions.act_window">
+            <field name="name">Employment Type</field>
+            <field name="res_model">hr.employment.type</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create new employment type.
+              </p>
+            </field>
+        </record>
+
+        <record id="view_hr_employment_status_tree" model="ir.ui.view">
+            <field name="name">hr.employment.status.tree</field>
+            <field name="model">hr.employment.status</field>
+            <field name="arch" type="xml">
+                <tree string="Employment Status" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_employment_status" model="ir.actions.act_window">
+            <field name="name">Employment Status</field>
+            <field name="res_model">hr.employment.status</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create new employment status.
+              </p>
+            </field>
+        </record>
+
+        <menuitem
+              id="menu_hr_employment_type"
+              action="action_hr_employment_type"
+              parent="hr.menu_human_resources_configuration"
+              sequence="1"/>
+
+        <menuitem
+              id="menu_hr_employment_status"
+              action="action_hr_employment_status"
+              parent="hr.menu_human_resources_configuration"
+              sequence="1"/>
+
+    </data>
+</odoo>

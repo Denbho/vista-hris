@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sequence_employee_id_number" model="ir.sequence">
+            <field name="name">Employee ID Number</field>
+            <field name="code">hr.employee.id.number</field>
+            <field name="prefix">%(year)s/%(month)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//h1//field[@name='name']/.." position="after">
+                    <field name="employee_number" placeholder="Employee Number"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_kanban_view_employees" model="ir.ui.view">
+            <field name="name">hr.employee.kanban.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <p>
+                        <field name="employee_number"/>
+                    </p>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_employee_filter" model="ir.ui.view">
+            <field name="name">hr.employee.search.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="employee_number"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

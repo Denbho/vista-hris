@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hris_interview_evaluation_all,hris_interview_evaluation_all,model_hris_interview_evaluation,,1,0,0,0
+access_hris_interview_evaluation_user,hris_interview_evaluation_user,model_hris_interview_evaluation,base.group_user,1,1,1,1
+access_hr_application_examination_result_user,hr_application_examination_result_user,model_hr_application_examination_result,base.group_user,1,1,1,1

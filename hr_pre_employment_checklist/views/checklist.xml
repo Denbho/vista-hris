@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="employee_form_view" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <page name="personal_information" position="before">
+                    <page name="document" string="Pre-employment Requirements">
+                        <field name="document_requirement_ids" widget="many2many_checkboxes"/>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+        <record id="hr_applicant_view_form" model="ir.ui.view">
+            <field name="name">hr.applicant.form</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='description']" position="after">
+                    <notebook>
+                        <page name="document" string="Pre-employment Requirements">
+                            <field name="document_requirement_ids" widget="many2many_checkboxes"/>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_document_checklist_view_form" model="ir.ui.view">
+            <field name="name">hr.document.checklist.view.form</field>
+            <field name="model">hr.document.checklist</field>
+            <field name="arch" type="xml">
+                <form string="Document Checklist">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="required_pre_employment_requirement"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_document_checklist_view_tree" model="ir.ui.view">
+            <field name="name">hr.document.checklist.view.tree</field>
+            <field name="model">hr.document.checklist</field>
+            <field name="arch" type="xml">
+                <tree string="Document Checklist">
+                    <field name="name"/>
+                    <field name="required_pre_employment_requirement"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_document_checklist_action" model="ir.actions.act_window">
+            <field name="name">Document Requirement Checklist</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.document.checklist</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+                id="hr_document_checklist_menu"
+                parent="hr_recruitment.menu_hr_recruitment_configuration"
+                action="hr_document_checklist_action"
+                sequence="1"/>
+
+    </data>
+</odoo>

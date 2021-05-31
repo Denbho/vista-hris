@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!--
+      Author: Ruel Costob
+      Date Created: 1/26/2021
+      Last Update: 1/28/2021
+   -->
+    <data>
+      <record id="paperformat_personnel_requisition" model="report.paperformat">
+        <field name="name">Personnel Requisition</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+      </record>
+
+      <report
+          id="action_report_personnelrequisition"
+          string="Personnel Requisition Form"
+          model="hr.personnel.requisition"
+          report_type="qweb-pdf"
+          file="hr_personnel_requisition.report_personnelrequisition"
+          name="hr_personnel_requisition.report_personnelrequisition"
+          print_report_name="'Personnel Requisition Form - %s' % (object.job_id.name)"
+          paperformat="hr_personnel_requisition.paperformat_personnel_requisition"
+      />
+
+    </data>
+</odoo>

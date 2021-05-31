@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_contract_proposal_action_form" model="ir.actions.act_window">
+            <field name="name">Contract Proposal</field>
+            <field name="res_model">hr.contract</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <record id="hr_applicant_requisition_action_form" model="ir.actions.act_window">
+            <field name="name">Applicants</field>
+            <field name="res_model">hr.applicant</field>
+            <field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+            <field name="domain">[('personnel_requisition_id', '=', active_id)]</field>
+            <field name="context">{'default_personnel_requisition_id': active_id, 'default_company_id': company_id, 'default_job_id': job_id, 'default_department_id': department_id}</field>
+        </record>
+
+
+        <record id="sequence_personnel_requisition" model="ir.sequence">
+            <field name="name">Personnel Requisition</field>
+            <field name="code">personnel.requisition</field>
+            <field name="prefix">HPR%(year)s/%(month)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="employee_requisition_skill_view_form" model="ir.ui.view">
+            <field name="name">hr.employees.skill.requisition.form</field>
+            <field name="model">hr.employee.requisition.skill</field>
+            <field name="arch" type="xml">
+                <form string="Skills">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="skill_type_id"/>
+                                <field
+                                        name="skill_id"
+                                        domain="[('skill_type_id', '=', skill_type_id)]"
+                                        options="{'no_create_edit':True}"/>
+                            </group>
+                            <group>
+                                <field name="skill_level_id" domain="[('skill_type_id', '=', skill_type_id)]"/>
+                                <field name="level_progress" widget="progressbar"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_personnel_requisition_view_form" model="ir.ui.view">
+            <field name="name">hr.personnel.requisition.form</field>
+            <field name="model">hr.personnel.requisition</field>
+            <field name="arch" type="xml">
+                <form string="Personnel Requisition Form">
+                    <header>
+                        <button name="submit_request" string="Submit"
+                                class="oe_highlight" states="draft" type="object"
+                                groups="hr_personnel_requisition.group_hr_personnel_requisition_creator"/>
+                        <button name="confirm_request" string="Confirm"
+                                class="oe_highlight" states="submitted" type="object"
+                                groups="hr_personnel_requisition.group_hr_personnel_requisition_confirm"/>
+                        <button name="verify_request" string="Verify"
+                                class="oe_highlight" states="confirmed" type="object"
+                                groups="hr_personnel_requisition.group_hr_personnel_requisition_verify"/>
+                        <button name="approve1_request" string="Approve" help="1st Approval"
+                                class="oe_highlight" states="verified" type="object"
+                                groups="hr_personnel_requisition.group_hr_personnel_requisition_approval1"/>
+                        <button name="approve2_request" string="Approve" help="2nd Approval"
+                                class="oe_highlight" states="approved1" type="object"
+                                groups="hr_personnel_requisition.group_hr_personnel_requisition_approval2"/>
+                        <button name="approve_request" string="Approve" help="Final Approval"
+                                class="oe_highlight" states="approved2" type="object"
+                                groups="hr_personnel_requisition.group_hr_personnel_requisition_approval_final"/>
+                        <button name="get_hiring_status" string="Recompute" class="oe_highlight" icon="fa-calculator"
+                                attrs="{'invisible': ['|' , ('hiring_status', 'in', ['done', 'draft'])]}"
+                                type="object" states="approved"/>
+                        <button name="hiring_force_done" string="Force Done" class="oe_highlight"
+                                attrs="{'invisible': ['|' ,('hiring_status', 'in', ['done', 'draft'])]}"
+                                type="object" states="approved"/>
+                        <button name="hiring_halt" string="Halt" class="oe_highlight"
+                                attrs="{'invisible': ['|' ,('hiring_status', 'in', ['halted', 'done', 'draft'])]}"
+                                type="object" states="approved"/>
+                        <button name="hiring_resume" string="Resume" class="oe_highlight"
+                                attrs="{'invisible': ['|' , ('hiring_status', 'in', ['inprogress', 'done', 'draft'])]}"
+                                type="object" states="approved"/>
+                        <!-- <button name="hiring_cancel" string="Resume" class="oe_highlight"-->
+                        <!-- attrs="{'invisible': [('state', '=', 'approved'), ('hiring_status', 'not in', ['inprogress', 'halted'])]}"-->
+                        <!-- type="object"/>-->
+                        <button name="cancel_request" string="Cancel/Rejects"
+                                class="oe_highlight" states="submitted,confirmed,verified" type="object"/>
+                        <button name="reset_to_draft_request"
+                                string="Reset to Draft" class="oe_highlight" states="canceled" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <h3>
+                            <field name="name" invisible="1" readonly="1" force_save="1"/>
+                        </h3>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="job_id" placeholder="Job Position"/>
+                            </h1>
+                            <div name="options_active">
+                                <div>
+                                    <label for="department_id" class="oe_inline"/>
+                                    <field name="department_id" class="oe_inline"/>
+                                </div>
+                                <div>
+                                    <label for="hr_department_group_id" class="oe_inline"/>
+                                    <field name="hr_department_group_id" class="oe_inline"/>
+                                </div>
+                                <div>
+                                    <label for="office_id" class="oe_inline"/>
+                                    <field name="office_id" class="oe_inline"/>
+                                </div>
+                                <div groups="base.group_multi_company">
+                                    <label for="company_id" class="oe_inline"/>
+                                    <field name="company_id" class="oe_inline" readonly="1" force_save="1"/>
+                                </div>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="request_type"/>
+                                <field name="replacement_employee_id"
+                                       attrs="{'invisible': [('request_type', 'in', ['New', False])]}"/>
+                                <field name="employment_type_id"/>
+                                <field name="rank_id"/>
+                                <field name="rank_group_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="current_headcount"/>
+                                <field name="expected_new_employee"/>
+                                <field name="total_applicants" readonly="1"/>
+                                <field name="target_start_date"/>
+                                <label for="hiring_status"/>
+                                <div>
+                                    <field name="hiring_status" states="approved" class="oe_inline"/>
+                                    <field name="done_date" class="oe_inline" readonly="1"/>
+                                    <field name="forced_done" class="oe_inline" readonly="1"
+                                           attrs="{'invisible': [('forced_done', '=', False)]}"/>
+                                    <field name="forced_done_user_id" class="oe_inline" readonly="1"/>
+                                </div>
+                                <field name="total_hired" states="approved" readonly="1"/>
+                                <field name="total_proposed" states="approved" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Requisition Justification"/>
+                        <field name="description" colspan="2"/>
+                        <notebook>
+                            <page name="requirements" string="Requirements and Qualifications">
+                                <group>
+                                    <group>
+                                        <separator string="Skills Requirement" colspan="2"/>
+                                        <field mode="tree" nolabel="1" name="requisition_skill_ids" widget="hr_skills"
+                                               colspan="2">
+                                            <tree>
+                                                <field name="skill_type_id" invisible="1"/>
+                                                <field name="skill_id"/>
+                                                <field name="skill_level_id"/>
+                                                <field name="level_progress" widget="progressbar"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                    <group>
+                                        <separator string="Job Description" colspan="2"/>
+                                        <field name="job_description" widget="html" nolabel="1" colspan="2"/>
+                                        <separator string="Qualifications"/>
+                                        <field name="job_qualification" nolabel="1" widget="html" colspan="2"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="applicant" string="Applicants" attrs="{'invisible': [('total_applicants', '=', 0)]}">
+                                <field name="applicant_ids" colspan="2"/>
+                            </page>
+                            <page name="Approvals" string="Approvals" states="submitted,confirmed,verified,approved1,approved2,approved">
+                                <group>
+                                    <group>
+                                        <label for="submitted_by" states="submitted,confirmed,verified,approved1,approved2,approved"/>
+                                        <div states="submitted,confirmed,verified,approved1,approved2,approved">
+                                            <field name="submitted_by" class="oe_inline"/>
+                                            <field name="submitted_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="confirmed_by" states="confirmed,verified,approved1,approved2,approved"/>
+                                        <div states="confirmed,verified,approved1,approved2,approved">
+                                            <field name="confirmed_by" class="oe_inline"/>
+                                            <field name="confirmed_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="verified_by" states="verified,approved1,approved2,approved"/>
+                                        <div states="verified,approved1,approved2,approved">
+                                            <field name="verified_by" class="oe_inline"/>
+                                            <field name="verified_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <label for="approved1_by" string="Approved (1st)" states="approved1,approved2,approved"/>
+                                        <div states="approved1,approved2,approved">
+                                            <field name="approved1_by" class="oe_inline"/>
+                                            <field name="approved1_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="approved2_by" string="Approved (2nd)" states="approved2,approved"/>
+                                        <div states="approved2,approved">
+                                            <field name="approved2_by" class="oe_inline"/>
+                                            <field name="approved2_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="approved_by" string="Approved (Final)" states="approved"/>
+                                        <div states="approved">
+                                            <field name="approved_by" class="oe_inline"/>
+                                            <field name="approved_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="canceled_by" states="canceled"/>
+                                        <div states="canceled">
+                                            <field name="canceled_by" class="oe_inline"/>
+                                            <field name="canceled_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_personnel_requisition_view_tree" model="ir.ui.view">
+            <field name="name">hr.personnel.requisition.tree</field>
+            <field name="model">hr.personnel.requisition</field>
+            <field name="arch" type="xml">
+                <tree string="Personnel Requisition Tree">
+                    <field name="name"/>
+                    <field name="job_id"/>
+                    <field name="department_id"/>
+                    <field name="expected_new_employee"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="total_applicants"/>
+                    <field name="hiring_status"/>
+                    <field name="total_hired"/>
+                    <field name="total_proposed"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_personnel_requisition_filter" model="ir.ui.view">
+            <field name="name">hr.personnel.requisition.search</field>
+            <field name="model">hr.personnel.requisition</field>
+            <field name="arch" type="xml">
+                <search string="Property Sales">
+                    <field name="name"/>
+                    <field name="job_id"/>
+                    <field name="department_id"/>
+                    <field name="description"/>
+                    <field name="job_description"/>
+                    <field name="job_qualification"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_job_id" string="Job Position" domain="[]"
+                                context="{'group_by': 'job_id'}"/>
+                        <filter name="group_department_id" string="Department" domain="[]"
+                                context="{'group_by': 'department_id'}"/>
+                        <filter name="group_department_group_id" string="Department Group" domain="[]"
+                                context="{'group_by': 'hr_department_group_id'}"/>
+                        <filter name="group_company_id" groups="base.group_multi_company" string="Company" domain="[]"
+                                context="{'group_by': 'company_id'}"/>
+                        <filter name="group_request_type" string="Request Type" domain="[]"
+                                context="{'group_by': 'request_type'}"/>
+                        <filter name="group_employment_type_id" string="Employment Type" domain="[]"
+                                context="{'group_by': 'employment_type_id'}"/>
+                        <filter name="group_state" string="Status" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="company_id" groups="base.group_multi_company" icon="fa-building"/>
+                        <field name="job_id" icon="fa-folder" select="multi"
+                               domain="[('company_id', 'in', [company_id, False])]"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="hr_personnel_requisition_view_pivot" model="ir.ui.view">
+            <field name="name">hr.personnel.requisition.pivot</field>
+            <field name="model">hr.personnel.requisition</field>
+            <field name="arch" type="xml">
+                <pivot string="Personnel Requisition">
+                    <field name="company_id" type="row"/>
+                    <field name="hr_department_group_id" type="row"/>
+                    <field name="department_id" type="row"/>
+                    <field name="job_id" type="row"/>
+                    <field name="submitted_by" type="row"/>
+                    <field name="submitted_date" interval="year" type="col"/>
+                    <field name="submitted_date" interval="month" type="col"/>
+                    <field name="expected_new_employee" type="measure"/>
+                    <field name="total_applicants" type="measure"/>
+                    <field name="total_proposed" type="measure"/>
+                    <field name="total_hired" type="measure"/>
+                    <field name="total_for_recruitment" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="hr_personnel_requisition_action_form" model="ir.actions.act_window">
+            <field name="name">Personnel Requisition</field>
+            <field name="res_model">hr.personnel.requisition</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{'search_default_assigned_me': 1}</field>
+        </record>
+
+        <menuitem
+                name="Personnel Requisition"
+                parent="hr_recruitment.menu_hr_recruitment_root"
+                id="menu_hr_personnel_requisition_categ" sequence="1"
+                groups="hr_personnel_requisition.group_hr_personnel_requisition_creator"/>
+
+        <menuitem
+                parent="menu_hr_personnel_requisition_categ"
+                id="menu_hr_personnel_requisition_action" action="hr_personnel_requisition_action_form" sequence="1"/>
+
+        <record id="hr_recruitment_stage_form" model="ir.ui.view">
+            <field name="name">hr.recruitment.stage.form</field>
+            <field name="model">hr.recruitment.stage</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_recruitment_stage_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='fold']" position="after">
+                    <field name="create_employee"/>
+                    <field name="create_contract"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_hr_job_form" model="ir.ui.view">
+            <field name="name">hr.job.form</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='set_recruit']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='set_open']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="hr_applicant_view_search_bis" model="ir.ui.view">
+            <field name="name">hr.applicant.view.search</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='job_id']" position="before">
+                    <field name="personnel_requisition_id"/>
+                </xpath>
+                <xpath expr="//filter[@name='job']" position="before">
+                    <filter string="Personnel Requisition" name="group_personnel_requisition" domain="[]"
+                            context="{'group_by': 'personnel_requisition_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_applicant_view_form" model="ir.ui.view">
+            <field name="name">hr.applicant</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='create_employee_from_applicant']" position="replace">
+                    <field name="stage_create_employee" invisible="1"/>
+                    <field name="stage_create_contract" invisible="1"/>
+                    <button string="Create Draft Contract" name="create_draft_contract" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', '|', ('contract_id', '!=', False),('active', '=', False), ('stage_create_contract', '=', False)]}"
+                            confirm="Are you sure?"/>
+                    <button string="Create Employee" name="create_employee_from_applicant" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', '|', ('emp_id', '!=', False),('active', '=', False), ('stage_create_employee', '=', False)]}"
+                            confirm="Are you sure?"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_name']" position="replace">
+                    <field name="partner_name" attrs="{'invisible': [('emp_id', 'not in', [False])]}"/>
+                    <field name="emp_id" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="replace"/>
+                <xpath expr="//field[@name='job_id']" position="before">
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </xpath>
+                <xpath expr="//field[@name='job_id']" position="replace">
+                    <field name="job_id" class="oe_inline"
+                           options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                    <field name="personnel_requisition_id" class="oe_inline"
+                           options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                </xpath>
+                <xpath expr="//field[@name='department_id']" position="after">
+                    <field name="hr_department_group_id"/>
+                    <field name="office_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                    <field name="employment_type_id"/>
+                </xpath>
+                <xpath expr="//field[@name='availability']" position="after">
+                    <field name="contract_id" readonly="1" attrs="{'invisible': [('contract_id', 'in', [False])]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+
+<!--Mandalay2o2o!-->

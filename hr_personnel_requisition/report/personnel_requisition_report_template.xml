@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Author: Ruel Costob
+        Date Created: 1/26/2021
+        Last Update: 1/28/2021
+     -->
+    <template id="report_personnelrequisition_form">
+        <style>
+            .page-personnel-requisition{ font-family: sans-serif; }
+            .personnel_req_header{ text-align: center; font-weight: bold; }
+            .personnel_req_header h3, .personnel_req_header h2{ margin-top: 0;}
+            .personnel_req_header h3{ margin-bottom: 0; }
+            .tbl-type-employment{ margin-top: 40px; margin-bottom: 20px; }
+            .tbl-type-employment tr td{ padding-top: 10px; }
+            .tbl-type-employment tr td:nth-child(even){ border-bottom: 1px solid #000; width: 230px; text-align: center;
+            }
+            .tbl-type-employment tr td:nth-child(odd){ padding-right: 5px; }
+            .tbl-type-employment tr td:nth-child(3){ padding-left: 30px; }
+            .tbl-type-employment tr:last-child td:last-child{ border-bottom: 0; }
+            .job-description, .job-qualification{ margin-top: 40px; }
+            .tbl-submitted-by{ margin-top: 70px; }
+            .tbl-skill-requirement, .tbl-approval{ margin-left: auto; margin-right: auto; border-collapse: collapse; }
+            .tbl-skill-requirement{ margin-top: 50px; margin-bottom: 30px; }
+            .tbl-skill-requirement th{ color: #fff; background-color: #808000; }
+            .tbl-skill-requirement tbody tr:nth-child(even){ background-color: #FAF0E6; }
+            .tbl-skill-requirement td, .tbl-skill-requirement th{ padding: 15px; border: 1px solid #ddd; }
+            .tbl-skill-requirement tr td:nth-child(2), .tbl-skill-requirement tr td:nth-child(3){ text-align:center; }
+            .tbl-submitted-by tr:first-child td:nth-child(2){ border-bottom: 1px solid #000; }
+            .tbl-submitted-by tr td:nth-child(2){ text-align: center; padding-left: 10px; padding-right: 10px; }
+            .recommending-approval{ margin-top: 50px; }
+            .td-border-bottom{ border-bottom: 1px solid #000; padding-left: 15px; padding-right: 15px; }
+            .tbl-approval{ margin-top: 50px; }
+            .tbl-approval.tbl-approved{ margin-top: 20px; }
+            .tbl-approval tr td:nth-child(2){ width:100px; }
+            .tbl-approval tr td{ text-align:center; }
+            .tbl-approval tr:nth-child(even){ text-transform: uppercase; }
+            .td-bottom-spacing{ padding-bottom: 50px; }
+            .div-row{ display:flex; }
+            .div-row > div:first-child{ width: 50%; padding-right:30px; }
+            .div-row > div:nth-child(2){ width: 50%; }
+        </style>
+        <div class="page-personnel-requisition">
+            <div class="personnel_req_header">
+                <h3>HR DEPARTMENT</h3>
+                <h2>PERSONNEL REQUISITION FORM</h2>
+            </div>
+            <table class="tbl-type-employment">
+                <tr>
+                    <td>JOB POSITION:</td>
+                    <td><p t-if="doc.job_id"><span t-field="doc.job_id.name"/></p></td>
+                    <td>EXPECTED NEW EMPLOYEE:</td>
+                    <td><p t-if="doc.expected_new_employee"><span t-field="doc.expected_new_employee"/></p></td>
+                </tr>
+                <tr>
+                    <td>COMPANY:</td>
+                    <td><p t-if="doc.company_id"><span t-field="doc.company_id.name"/></p></td>
+                    <td>TARGET START DATE:</td>
+                    <td><p t-if="doc.target_start_date"><span t-field="doc.target_start_date"/></p></td>
+                </tr>
+                <tr>
+                    <td>DEPARTMENT:</td>
+                    <td><p t-if="doc.department_id"><span t-field="doc.department_id.name"/></p></td>
+                    <td>EMPLOYMENT TYPE:</td>
+                    <td><p t-if="doc.employment_type_id"><span t-field="doc.employment_type_id.name"/></p></td>
+                </tr>
+                <tr>
+                    <td>REQUEST TYPE:</td>
+                    <td><p t-field="doc.request_type"/></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="div-row">
+                <div class="div-col">
+                    <t t-if="doc.job_description">
+                        <div class="job-description">
+                            <strong>JOB DESCRIPTION</strong>
+                            <span t-raw="doc.job_description"/>
+                        </div>
+                    </t>
+                    <t t-if="doc.job_qualification">
+                        <div class="job-qualification">
+                            <strong>QUALIFICATIONS</strong>
+                            <span t-raw="doc.job_qualification"/>
+                        </div>
+                    </t>
+                </div>
+                <div class="div-col">
+                    <table class="tbl-skill-requirement">
+                        <thead>
+                            <tr>
+                                <th colspan="4">SKILLS REQUIREMENT</th>
+                            </tr>
+                            <tr>
+                                <th>Skill</th>
+                                <th>Type</th>
+                                <th>Level</th>
+                                <th>Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.requisition_skill_ids" t-as="line">
+                                <tr>
+                                    <td><span t-field="line.skill_id.name"/></td>
+                                    <td><span t-field="line.skill_type_id.name"/></td>
+                                    <td><span t-field="line.skill_level_id.name"/></td>
+                                    <td><span t-field="line.level_progress"/>%</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <t t-if="doc.submitted_by">
+                <table class="tbl-submitted-by">
+                    <tr>
+                        <th>SUBMITTED BY:</th>
+                        <td><p t-if="doc.submitted_by"><span t-field="doc.submitted_by.name"/> | <span
+                                t-field="doc.submitted_date"/></p></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><small>Signature over Printed Name</small></td>
+                    </tr>
+                </table>
+            </t>
+            <t t-if="doc.confirmed_by">
+                <div class="recommending-approval">
+                    <strong>RECOMMENDING APPROVAL:</strong>
+                    <table class="tbl-approval">
+                        <tr>
+                            <td class="td-border-bottom"><span t-field="doc.confirmed_by.name"/> | <span
+                                    t-field="doc.confirmed_date"/></td>
+                            <td></td>
+                            <t t-if="doc.verified_by">
+                                <td class="td-border-bottom"><span t-field="doc.verified_by.name"/> | <span
+                                        t-field="doc.verified_date"/></td>
+                            </t>
+                            <t t-if="not doc.verified_by"><td></td></t>
+                        </tr>
+                        <tr>
+                            <td class="td-bottom-spacing">
+                                <t t-if="doc.confirmed_by.employee_id">
+                                    <p t-field="doc.confirmed_by.employee_id.job_id.name"/>
+                                </t>
+                            </td>
+                            <td></td>
+                            <td class="td-bottom-spacing">
+                                <t t-if="doc.verified_by and doc.verified_by.employee_id">
+                                    <p t-field="doc.verified_by.employee_id.job_id.name"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <t t-if="doc.approved1_by">
+                                <td class="td-border-bottom"><span t-field="doc.approved1_by.name"/> | <span
+                                        t-field="doc.approved1_date"/></td>
+                            </t>
+                            <t t-if="not doc.approved1_by"><td></td></t>
+                            <td></td>
+                            <t t-if="doc.approved2_by">
+                                <td class="td-border-bottom"><span t-field="doc.approved2_by.name"/> | <span
+                                        t-field="doc.approved2_date"/></td>
+                            </t>
+                            <t t-if="not doc.approved2_by"><td></td></t>
+                        </tr>
+                        <tr>
+                            <td class="td-bottom-spacing">
+                                <t t-if="doc.approved1_by and doc.approved1_by.employee_id">
+                                    <p t-field="doc.approved1_by.employee_id.job_id.name"/>
+                                </t>
+                            </td>
+                            <td></td>
+                            <td class="td-bottom-spacing">
+                                <t t-if="doc.approved2_by and doc.approved2_by.employee_id">
+                                    <p t-field="doc.approved2_by.employee_id.job_id.name"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+                    <t t-if="doc.approved_by">
+                        <table class="tbl-approval tbl-approved">
+                            <tr>
+                                <td class="td-border-bottom"><span t-field="doc.approved_by.name"/> | <span
+                                        t-field="doc.approved_date"/></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <t t-if="doc.approved_by.employee_id">
+                                        <p t-field="doc.approved_by.employee_id.job_id.name"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </template>
+    <template id="report_personnelrequisition">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="hr_personnel_requisition.report_personnelrequisition_form"/>
+            </t>
+        </t>
+    </template>
+</odoo>

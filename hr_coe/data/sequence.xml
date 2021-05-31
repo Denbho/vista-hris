@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="employee_certificate_sequence" model="ir.sequence">
+            <field name="name">Employee Certification</field>
+            <field name="code">employee.certificate</field>
+            <field name="prefix">COE</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="employee_document_request_sequence" model="ir.sequence">
+            <field name="name">HR Document Request</field>
+            <field name="code">hr.document.request</field>
+            <field name="prefix">HRDR</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

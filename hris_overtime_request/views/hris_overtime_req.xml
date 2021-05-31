@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <!-- Inherit Form view -->
+  <record id="view_employee_form_inherit" model="ir.ui.view">
+    <field name="name">hr.employee.form</field>
+    <field name="model">hr.employee</field>
+    <field name="inherit_id" ref="hr.view_employee_form"/>
+    <field name="arch" type="xml">
+    	 <xpath expr="//field[@name='coach_id']" position="after">
+    	 	<field name="responsible_id"/>
+    	 </xpath>
+    </field>
+	</record>
+
+	<record id="view_overtime_request_tree" model="ir.ui.view">
+		<field name="name">request.overtime.app.tree</field>
+		<field name="model">request.overtime.app</field>
+		<field name="arch" type="xml">
+			<tree decoration-bf="message_needaction==True" decoration-muted="state == 'draft'" decoration-info="state == 'to_approve'" decoration-danger="state in ('rejected')" decoration-success="state == 'approved'" string="Overtime Request Applications">
+				<field name="message_needaction" invisible="1" />
+				<field name="name" />
+				<field name="employee_id" />
+			    <field name="job_id" />
+			    <field name="manager_id" />
+			    <field name="date_filling" />
+			    <field name="no_of_hours" />
+			    <field name="state"/>
+			</tree>
+	    </field>
+    </record>
+
+    <record id="view_overtime_request_form" model="ir.ui.view" >
+		<field name="name">request.overtime.app.form</field>
+		<field name="model">request.overtime.app</field>
+		<field name="arch" type="xml">
+			<form string="Overtime">
+				<header>
+					<button name="button_to_approve" states="draft" string="Request approval"
+						type="object" class="oe_highlight"/>
+          <button name="button_confirm" states="to_confirm" string="Confirm"
+						type="object" class="oe_highlight" groups="hris_overtime_request.group_ot_approver_level1"/>
+					<button name="button_approved" states="to_approve" string="Approve"
+						type="object" class="oe_highlight" groups="hris_overtime_request.group_ot_approver_level2"/>
+          <button name="button_to_verify" states="approved" string="Submit to Verify"
+						type="object" class="oe_highlight"/>
+					<button name="button_to_verified" states="verify" string="Verify"
+						type="object" class="oe_highlight" groups="hris_overtime_request.group_ot_approver_level3"/>
+					<button name="button_rejected" states="to_confirm,to_approve,approved" groups="hris_overtime_request.group_ot_approver_level1"
+						type="object" string="Reject" statusbar_colors='rejected:"red"}'/>
+					<field name="state" widget="statusbar"
+						statusbar_visible="approved,verified"
+						statusbar_colors='{"approved":"blue"}' />
+				</header>
+				<sheet>
+					<h3>
+						<field name="name" force_save="1"/>
+					</h3>
+					<div class="oe_title">
+						<h1>
+							<field name="employee_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+						</h1>
+						<div>
+							<label for="job_id" class="oe_inline"/>
+							<field name="job_id" class="oe_inline" readonly="1" force_save="1"/>
+						</div>
+						<div>
+							<label for="department_id" class="oe_inline"/>
+							<field name="department_id" class="oe_inline" readonly="1" force_save="1"/>
+						</div>
+					</div>
+					<group>
+						<group string="Request">
+							<field name="date_filling"/>
+							<field name="date"/>
+							<label for="date" string="Overtime Date"/>
+							<div>
+								<field name="time_from" class="oe_inline" widget="float_time"/>-
+								<field name="time_to" class="oe_inline" widget="float_time"/>=
+								<field name="no_of_hours" widget="float_time" class="oe_inline"/>
+							</div>
+							<field name="work_to_perform" string="Purpose of Overtime" widget="html"/>
+						</group>
+						<group string="Actual Overtime Hours" states="approved,verify,verified">
+							<label for="actual_time_start" string="Time"/>
+							<div>
+								<field name="actual_time_start" class="oe_inline" widget="float_time"/>-
+								<field name="actual_time_end" class="oe_inline" widget="float_time"/>=
+								<field name="actual_total" widget="float_time" class="oe_inline"/>
+							</div>
+							<field name="work_performed" string="Work Performed" widget="html"/>
+						</group>
+					</group>
+			    </sheet>
+				<div class="oe_chatter">
+				 	<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+          <field name="activity_ids" widget="mail_activity"/>
+          <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipent'}"/>
+				</div>
+			</form>
+		</field>
+	</record>
+
+  <record id="action_overtime_request" model="ir.actions.act_window">
+		<field name="name">Overtime Request</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">request.overtime.app</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{}</field>
+		<field name="domain">[]</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create your Overtime Request Here !
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="overtime_request_parent_menu"
+		      name="Overtime"
+		      parent="hr.menu_hr_root"
+		      sequence="50"/>
+
+  <menuitem id="overtime_request_menu"
+  	      name="Overtime Request" action="action_overtime_request"
+  	      parent="overtime_request_parent_menu"
+  	      sequence="80"/>
+
+</odoo>

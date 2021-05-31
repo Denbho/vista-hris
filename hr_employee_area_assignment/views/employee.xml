@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem
+                id="res_region_cluster_categ"
+                name="Project Area"
+                parent="hr.menu_human_resources_configuration"
+                sequence="3"
+                groups="hr.group_hr_user"/>
+
+        <record id="res_region_cluster_view_tree" model="ir.ui.view">
+            <field name="name">res.region.cluster.tree</field>
+            <field name="model">res.region.cluster</field>
+            <field name="arch" type="xml">
+                <tree string="Cluster Tree">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="res_region_cluster_action" model="ir.actions.act_window">
+            <field name="name">Cluster</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.region.cluster</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="res_region_cluster_action_menu" name="Cluster"
+                  parent="res_region_cluster_categ"
+                  action="res_region_cluster_action" sequence="2"/>
+
+
+        <record id="hr_division_assignment_view_tree" model="ir.ui.view">
+            <field name="name">hr.division.assignment.tree</field>
+            <field name="model">hr.division.assignment</field>
+            <field name="arch" type="xml">
+                <tree string="Division Tree">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_division_assignment_action" model="ir.actions.act_window">
+            <field name="name">Division Assignment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.division.assignment</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="hr_division_assignment__action_menu" name="Division Assignment"
+                  parent="res_region_cluster_categ"
+                  action="hr_division_assignment_action" sequence="1"/>
+
+        <record id="hr_employee_project_area_view_tree" model="ir.ui.view">
+            <field name="name">hr.employee.project.area.tree</field>
+            <field name="model">hr.employee.project.area</field>
+            <field name="arch" type="xml">
+                <tree string="Project Area Tree">
+                    <field name="name"/>
+                    <field name="cluster_id"/>
+                    <field name="division_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_employee_project_area_action" model="ir.actions.act_window">
+            <field name="name">Project Area</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.project.area</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="hr_employee_project_area_action_menu" name="Project Area"
+                  parent="res_region_cluster_categ"
+                  action="hr_employee_project_area_action" sequence="1"/>
+
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='address_id']" position="after">
+                    <field name="project_area_id"/>
+                    <field name="cluster_id" attrs="{'invisible': [('cluster_id', '=', False)]}"/>
+                    <field name="division_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_filter" model="ir.ui.view">
+            <field name="name">hr.employee.search</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='group_job']" position="after">
+                    <filter name="group_project_area_id_id" string="Project Area" domain="[]"
+                            context="{'group_by': 'project_area_id'}"/>
+                    <filter name="group_cluster_id" string="Cluster" domain="[]"
+                            context="{'group_by': 'cluster_id'}"/>
+                    <filter name="group_division_id" string="Cluster" domain="[]"
+                            context="{'group_by': 'division_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

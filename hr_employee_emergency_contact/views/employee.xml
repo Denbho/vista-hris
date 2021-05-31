@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.view.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='emergency_contact']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='emergency_phone']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='emergency_phone']" position="after">
+                    <field name="emergency_contact_ids" nolabel="1" colspan="2">
+                        <tree string="Emergency Contact" editable="top">
+                            <field name="name"/>
+                            <field name="email"/>
+                            <field name="mobile" class="o_force_ltr"/>
+                            <field name="relationship"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="hr_employee_approve_coe_coe_view_form" model="ir.ui.view">
+            <field name="name">hr_employee_approve_coe_view_form</field>
+            <field name="model">hr.employee.approve.coe</field>
+            <field name="arch" type="xml">
+                <form string="Approved COE Form">
+                    <sheet>
+                        <group>
+                            <field name="date_validity"/>
+                        </group>
+                        <group string="Approver Signature">
+                            <field name="user_sign" widget="signature"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" type="object"
+                                class="btn btn-success" icon="fa-calendar-minus-o" string="Confirm"/>
+                        <button special="cancel" class="btn btn-danger" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_employee_approve_coe_coe_action_wizard" model="ir.actions.act_window">
+            <field name="name">Approve COE</field>
+            <field name="res_model">hr.employee.approve.coe</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hr_employee_approve_coe_coe_view_form"/>
+            <field name="target">new</field>
+        </record>
+    
+    </data>
+</odoo>

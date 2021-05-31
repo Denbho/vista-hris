@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record id="hr_employee_movement_view_form" model="ir.ui.view">
+          <field name="name">hr.employee.movement.view.form</field>
+          <field name="model">hr.employee.movement</field>
+          <field name="inherit_id" ref="hr_employee_movement.hr_employee_movement_view_form"/>
+          <field name="arch" type="xml">
+            <field name="job_title" position="after">
+              <field name="curr_employment_type_id" readonly="1" force_save="1"/>
+              <field name="curr_employment_status_id" readonly="1" force_save="1"/>
+              <field name="curr_company_assignment_id" readonly="1" force_save="1"/>
+            </field>
+            <xpath expr="//field[@name='new_company_id']" position="before">
+              <field name="company_assignment_id"
+                     attrs="{'invisible': [('movement_type', 'not in', ['lateral', 'promotion_lateral'])],
+                     'required': [('movement_type', 'in', ['lateral', 'promotion_lateral'])]}"/>
+            </xpath>
+            <xpath expr="//field[@name='new_rank_id']" position="after">
+              <field name="employment_type_id"
+                     attrs="{'invisible': [('movement_type', 'not in', ['promotion', 'promotion_lateral'])],
+                     'required': [('movement_type', 'in', ['promotion', 'promotion_lateral'])]}"/>
+              <field name="employment_status_id"
+                    attrs="{'invisible': [('movement_type', 'not in', ['promotion', 'promotion_lateral'])],
+                    'required': [('movement_type', 'in', ['promotion', 'promotion_lateral'])]}"/>
+            </xpath>
+          </field>
+        </record>
+
+    </data>
+</odoo>

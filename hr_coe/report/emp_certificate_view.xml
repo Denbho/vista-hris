@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="action_emp_certificate_pdf"
+            model="employee.certificate"
+            string="Employee Certification"
+            report_type="qweb-pdf"
+            menu="False"
+            name="hr_coe.report_hr_coe"
+            file="hr_coe.report_hr_coe"/>
+    </data>
+</odoo>

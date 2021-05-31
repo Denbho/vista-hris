@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.view.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="payroll_company_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_contract_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.view.form</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="payroll_company_id" required="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="employee_contract_payroll_company_form_view" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_employee_movement.employee_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='contract_history_ids']/tree/field[@name='company_id']" position="after">
+                    <field name="payroll_company_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_filter" model="ir.ui.view">
+            <field name="name">hr.employee.search</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='group_job']" position="after">
+                    <filter name="group_payroll_company_group" string="Payroll Company" domain="[]"
+                            context="{'group_by': 'payroll_company_id'}"/>
+                </xpath>
+                <xpath expr="//searchpanel/field[@name='department_id']" position="before">
+                    <field name="payroll_company_id" icon="fa-object-group"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_employee_movement_view_form" model="ir.ui.view">
+            <field name="name">hr.employee.movement.form.view</field>
+            <field name="model">hr.employee.movement</field>
+            <field name="inherit_id" ref="hr_employee_movement.hr_employee_movement_view_form"/>
+            <field name="arch" type="xml">
+                <field name="job_title" position="after">
+                  <field name="payroll_company_id" readonly="1" force_save="1"/>
+                </field>
+                <xpath expr="//field[@name='new_company_id']" position="after">
+                    <field name="new_payroll_company_id"
+                        attrs="{'invisible': [('movement_type', 'in', ['promotion', 'demotion'])],
+                                'required': [('movement_type', 'in', ['lateral', 'promotion_lateral', 'demotion_lateral'])]}"/>
+                </xpath>
+                <xpath expr="//field[@name='contract_history_ids']/tree/field[@name='company_id']" position="after">
+                    <field name="payroll_company_id"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

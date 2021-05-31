@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="interview_evaluation_form" model="ir.ui.view">
+        <field name="name">hris.interview.evaluation.form</field>
+        <field name="model">hris.interview.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Employee Certificate Validity">
+                <sheet>
+                    <h1 class="oe_inline">
+                        <p style="font-size:16;">INTERVIEWER'S EVALUATION FORM</p>
+                    </h1>
+                    <div class="oe_title">
+						<h1>
+							<field name="hr_applicant_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+						</h1>
+                        <div>
+							<label for="applicant_name" class="oe_inline"/>
+							<field name="applicant_name" class="oe_inline" readonly="1" force_save="1"/>
+						</div>
+						<div>
+							<label for="job_id" class="oe_inline"/>
+							<field name="job_id" class="oe_inline" readonly="1" force_save="1"/>
+						</div>
+						<div>
+							<label for="department_id" class="oe_inline"/>
+							<field name="department_id" class="oe_inline" readonly="1" force_save="1"/>
+						</div>
+                        <div groups="base.group_multi_company">
+							<label for="company_id" class="oe_inline"/>
+							<field name="company_id" class="oe_inline" readonly="1" force_save="1"/>
+						</div>
+					</div>
+                    <group>
+                        <div>
+                            <table class="table table-hover">
+                                <caption>(5) Excellent; (4) Very Good; (3) Good; (2) Fair; (1) Poor; (0) No opportunity to observe the factor</caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Factor</th>
+                                        <th scope="col">Ratings</th>
+                                        <th scope="col">Other Comments</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">A.</th>
+                                        <td>
+                                            <p><strong>PHYSICAL APPEARANCE</strong></p>
+                                            <p><em>Pleasant facial features; Good built</em></p>
+                                        </td>
+                                        <td><field name="f_apperance" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_apperance_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">B.</th>
+                                        <td>
+                                            <p><strong>GROOMING</strong></p>
+                                            <p><em>Neat and clean; Professionally attired</em></p>
+                                        </td>
+                                        <td><field name="f_grooming" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_grooming_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">C.</th>
+                                        <td>
+                                            <p><strong>IMPACT</strong></p>
+                                            <p><em>Creates good first impression; </em><br/><em>Commands attention and respect; Exudes an air of confidence</em></p>
+                                        </td>
+                                        <td><field name="f_impact" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_impact_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">D.</th>
+                                        <td>
+                                            <p><strong>ORAL COMMUNICATION</strong></p>
+                                            <p><em>Uses correct grammar; Effective voice intonation; Good diction</em></p>
+                                        </td>
+                                        <td><field name="f_oral" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_oral_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">E.</th>
+                                        <td>
+                                            <p><strong>MENTAL ABILITY</strong></p>
+                                            <p><em>Understands and answer questions well; </em><br/><em> Displays organized thoughts</em></p>
+                                        </td>
+                                        <td><field name="f_mental" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_mental_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">F.</th>
+                                        <td>
+                                            <p><strong>AMBITION</strong></p>
+                                            <p><em>With desire to achieve higher goals; </em><br/><em> With defined career plans</em></p>
+                                        </td>
+                                        <td><field name="f_ambition" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_ambition_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">G.</th>
+                                        <td>
+                                            <p><strong>RANGE OF INTEREST</strong></p>
+                                            <p><em>Affiliations; Extra curricular activities; Special skills</em></p>
+                                        </td>
+                                        <td><field name="f_interest" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_interest_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">G.</th>
+                                        <td>
+                                            <p><strong>WORK MOTIVATION</strong></p>
+                                            <p><em>Reasons for applying; Job Considerations</em></p>
+                                        </td>
+                                        <td><field name="f_motivation" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_motivation_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">I.</th>
+                                        <td>
+                                            <p><strong>WORK STANDARDS</strong></p>
+                                            <p><em>Values and Work Habits/Attitudes</em></p>
+                                        </td>
+                                        <td><field name="f_standard" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_standard_comment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">J.</th>
+                                        <td>
+                                            <p><strong>TECHNICAL SKILLS</strong></p>
+                                            <p><em>Formal trainings; Related Experience</em></p>
+                                        </td>
+                                        <td><field name="f_tech_skills" widget="radio" options="{'horizontal': true}"/></td>
+                                        <td><field name="f_tech_skills_comment"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </group>
+                    <separator string="OVERALL SUITABILITY TO THE JOB / OTHER COMMENTS"/>
+                    <field name="f_comments" widget="html" placeholder="Feedback of interviews..."/>
+                    <notebook>
+                        <page string="Recommendation">
+                            <group string="RECOMMENDATION : (PLEASE CHECK)">
+                                <field name="f_suitable"/>
+                                <field name="f_not_suitable"/>
+                                <field name="f_hold"/>
+                                <field name="f_lst_comments"/>
+                            </group>
+                        </page>
+
+                        <page string="Evaluator">
+                            <group string="Signature">
+                                <group>
+                                    <field name="evaluator_employee_id"/>
+                                    <field name="evaluator_job_id"/>
+                                    <field name="evaluator_department_id"/>
+                                    <field name="evaluator_user_id" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="f_signature" widget="signature"/>
+                                    <field name="f_date"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipent'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="interview_evaluation_tree_view">
+        <field name="name">hris.interview.evaluation.tree</field>
+        <field name="model">hris.interview.evaluation</field>
+        <field name="arch" type="xml">
+            <tree string="Interview Evaluation">
+                <field name="hr_applicant_id"/>
+                <field name="job_id"/>
+                <field name="company_id"/>
+                <field name="department_id"/>
+                <field name="f_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="interview_evaluation_calendar_view">
+        <field name="name">hris.interview.evaluation.calendar</field>
+        <field name="model">hris.interview.evaluation</field>
+        <field name="arch" type="xml">
+            <calendar string="Interview Evaluation" date_start="f_date" color="hr_applicant_id" event_limit="5">
+                <field name="hr_applicant_id"/>
+                <field name="job_id"/>
+                <field name="company_id"/>
+                <field name="department_id"/>
+                <field name="f_date"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="interview_evaluation_action">
+        <field name="name">Interview Evaluation</field>
+        <field name="res_model">hris.interview.evaluation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smiling_face">
+                Create Inventory Evaluation's Form
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="applicant_interview_evaluation_action">
+        <field name="name">Interview Evaluation</field>
+        <field name="res_model">hris.interview.evaluation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('hr_applicant_id', '=', active_id)]</field>
+        <field name="context">{'default_hr_applicant_id': active_id}</field>
+    </record>
+
+    <menuitem id="interview_evaluation_child"
+              name="Interview Evaluation Lines"
+              action="interview_evaluation_action"
+              sequence="3"
+              parent="hr_recruitment.menu_crm_case_categ0_act_job"/>
+
+    <record id="view_recruitment_form_view_inherit" model="ir.ui.view">
+        <field name="name">Jobs - Recruitment Form Inherit</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='create_employee_from_applicant']" position="before">
+                <button name="%(applicant_interview_evaluation_action)d" type="action" class="btn btn-warning" string="Interviewer Evaluation"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Inherit Form View to Modify it -->
+    <record id="hr_applicant_examination_result_view_form" model="ir.ui.view">
+        <field name="name">hr.applicant.form</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_pre_employment_checklist.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='document']" position="before">
+                <page name="examination_result" string="Examination Results">
+                    <field name="examination_result_ids" nolabel="1" colspan="2">
+                        <tree string="Examination Result" editable="top">
+                            <field name="category"/>
+                            <field name="iq_type" attrs="{'readonly': [('category', 'in', [False, 'Essay'])], 'required': [('category', '=', 'Iq')]}"/>
+                            <field name="rate"/>
+                            <field name="result"/>
+                            <field name="comment"/>
+                            <field name="reference_link" widget="url"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo> 

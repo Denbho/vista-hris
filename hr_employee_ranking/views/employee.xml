@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem
+                id="menu_hr_employee_rank_group_categ"
+                name="Ranks"
+                parent="hr.menu_human_resources_configuration"
+                sequence="3"
+                groups="hr.group_hr_user"/>
+
+
+        <record id="hr_employee_rank_group_view_tree" model="ir.ui.view">
+            <field name="name">hr.employee.rank.group.view.tree</field>
+            <field name="model">hr.employee.rank.group</field>
+            <field name="arch" type="xml">
+                <tree string="Rank Group" editable="top">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_employee_rank_group_action" model="ir.actions.act_window">
+            <field name="name">Rank Group</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.rank.group</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="hr_employee_rank_group_action_menu" name="Rank Group"
+                  parent="menu_hr_employee_rank_group_categ"
+                  action="hr_employee_rank_group_action" sequence="1"/>
+
+        <record id="hr_employee_rank_view_tree" model="ir.ui.view">
+            <field name="name">hr.employee.rank.view.tree</field>
+            <field name="model">hr.employee.rank</field>
+            <field name="arch" type="xml">
+                <tree string="Rank" editable="top">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="rank_group_id"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_employee_rank_action" model="ir.actions.act_window">
+            <field name="name">Rank</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.rank</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="hr_employee_rank_action_menu" name="Rank"
+                  parent="menu_hr_employee_rank_group_categ"
+                  action="hr_employee_rank_action" sequence="2"/>
+
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='job_id']" position="after">
+                    <field name="rank_id"/>
+                    <field name="rank_group_id" attrs="{'invisible': [('rank_group_id', '=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_filter" model="ir.ui.view">
+            <field name="name">hr.employee.search</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='group_job']" position="after">
+                    <filter name="group_rank_group_id" string="Rank Group" domain="[]"
+                            context="{'group_by': 'rank_group_id'}"/>
+                    <filter name="group_rank_id" string="Rank" domain="[]"
+                            context="{'group_by': 'rank_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

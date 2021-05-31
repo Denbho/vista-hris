@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_certificate,access_employee_certificate,model_employee_certificate,0,1,1,1,0
+access_employee_purpose,access_employee_purpose,model_employee_purpose,,1,1,1,0
+access_hr_document_request,access_hr_document_request,model_hr_document_request,,1,1,1,0
+access_employee_certificate_officer,access_employee.certificate_officer,model_employee_certificate,base.group_user,1,1,1,1
+access_employee_purpose_officer,access_employee_purpose_officer,model_employee_purpose,base.group_user,1,1,1,1
+access_hr_document_request_officer,access_hr_document_request_officer,model_hr_document_request,,1,1,1,1

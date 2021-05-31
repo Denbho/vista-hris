@@ -1,0 +1,27 @@
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="overtime_request_approve" model="mail.message.subtype">
+            <field name="name">Overtime Request to be approved</field>
+            <field name="res_model">request.overtime.app</field>
+            <field name="default" eval="True"/>
+            <field name="description">Overtime Request to be approved</field>
+        </record>
+
+        <record id="overtime_request_approved" model="mail.message.subtype">
+            <field name="name">Overtime Request approved</field>
+            <field name="res_model">request.overtime.app</field>
+            <field name="default" eval="True"/>
+            <field name="description">Overtime Request approved</field>
+        </record>
+
+        <record id="overtime_request_rejected" model="mail.message.subtype">
+            <field name="name">Overtime Request rejected</field>
+            <field name="res_model">request.overtime.app</field>
+            <field name="default" eval="True"/>
+            <field name="description">Overtime Request Rejected</field>
+        </record>
+
+    </data>
+</odoo>
+ -->

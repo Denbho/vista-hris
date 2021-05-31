@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <page name="personal_information" position="after">
+                    <page name="health_info" string="Health Information">
+                        <group>
+                            <group>
+                                <label for="height"/>
+                                <div>
+                                    <field name="height" class="oe_inline"/>
+                                    <field name="height_uom" class="oe_inline"/>
+                                </div>
+                                <label for="weight"/>
+                                <div>
+                                    <field name="weight" class="oe_inline"/>
+                                    <field name="weight_uom" class="oe_inline"/>
+                                </div>
+                                <field name="blood_type"/>
+                            </group>
+                            <group>
+                                <field name="annual_physical_exam"/>
+                                <field name="drug_test"/>
+                            </group>
+                        </group>
+                        <group string="Health Insurance">
+                            <group>
+                                <field name="health_card_provider"
+                                       attrs="{'required': [('health_card_number', 'not in', [False])]}"/>
+                                <field name="health_card_number"
+                                       attrs="{'required': [('health_card_provider', 'not in', [False])]}"/>
+                                <field name="cap_limit"/>
+                                <field name="credit_usage"/>
+                                <field name="currency_id"/>
+                            </group>
+                            <group>
+                                <label for="hmo_validity_date" string="Validity"/>
+                                <div>
+                                    <field name="hmo_validity_date" class="oe_inline"/> -
+                                    <field name="hmo_validity_date_end" class="oe_inline"/>
+                                </div>
+                                <field name="renewal_date"/>
+                                <field name="hmo_coverage"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="employee_dependent_ids" nolabel="1" colspan="2">
+                                <tree string="Dependents" editable="top">
+                                    <field name="name"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="age"/>
+                                    <field name="relationship"/>
+                                    <field name="covered"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="health_condition_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="health_condition"/>
+                                    <field name="doctor_name"/>
+                                    <field name="address"/>
+                                    <field name="medications"/>
+                                    <field name="medical_documents"/>
+                                    <field name="date"/>
+                                    <field name="fit_to_work"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+    </data>
+</odoo>

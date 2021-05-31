@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_filter" model="ir.ui.view">
+            <field name="name">hr.employee.search</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='message_needaction']" position="after">
+                    <separator/>
+                    <filter name="filter_calendar_birthday" date="calendar_birthday" string="Birthdays" default_period="this_week"/>
+                </xpath>
+                <xpath expr="//filter[@name='group_job']" position="after">
+                    <filter name="group_age_range" string="Age Range" domain="[]" context="{'group_by': 'age_range_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='birthday']" position="after">
+                    <field name="age"/>
+                    <field name="age_range_id"/>
+                    <field name="dyob" invisible="1"/>
+                    <field name="mob" invisible="1"/>
+                    <field name="yob" invisible="1"/>
+                    <field name="calendar_birthday" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

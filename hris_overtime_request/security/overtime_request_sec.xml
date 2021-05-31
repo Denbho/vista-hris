@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+      <record model="ir.module.category" id="ot_approver_category">
+          <field name="name">Overtime Approver</field>
+          <field name="sequence">13</field>
+      </record>
+
+      <record id="group_ot_approver_level1" model="res.groups">
+          <field name="name">Level 1</field>
+          <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+          <field name="category_id" ref="ot_approver_category"/>
+      </record>
+
+      <record id="group_ot_approver_level2" model="res.groups">
+          <field name="name">Level 2</field>
+          <field name="implied_ids" eval="[(4, ref('hris_overtime_request.group_ot_approver_level1'))]"/>
+          <field name="category_id" ref="ot_approver_category"/>
+      </record>
+
+      <record id="group_ot_approver_level3" model="res.groups">
+          <field name="name">Level 3</field>
+          <field name="implied_ids" eval="[(4, ref('hris_overtime_request.group_ot_approver_level2'))]"/>
+          <field name="category_id" ref="ot_approver_category"/>
+          <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+      </record>
+
+    </data>
+</odoo>
